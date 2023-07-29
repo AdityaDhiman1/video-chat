@@ -11,14 +11,16 @@ const PORT = process.env.PORT || 8000;
 
 const users = new Map();
 
-app.set('view engine', 'hbs');
+app.set('view engine', 'hbs')
+app.use(express.static(path.join(__dirname, '../public/css')));
 app.get('/', (req, res) => {
-    res.render('home')
+    res.render('home');
 })
 io.on('connection', socket => {
     console.log(`user connected: ${socket.id}`);
     users.set(socket.id, socket.id);
 
+    // emit that a new user has joined as soon as someone joins
     socket.broadcast.emit('users:joined', socket.id);
     socket.emit('hello', { id: socket.id });
 
@@ -42,7 +44,7 @@ io.on('connection', socket => {
 });
 
 
-// app.use(express.static( path.resolve('./public') ));
+app.use(express.static( path.resolve('./public') ));
 
 app.get('/users', (req, res) => {
     return res.json(Array.from(users));
