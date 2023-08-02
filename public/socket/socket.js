@@ -125,7 +125,5 @@ const socket = io();
             videoEle.play()
         }
 
-        
-
         window.addEventListener('load', getAndUpdateUsers);
         window.addEventListener('load', getUserMedia);
