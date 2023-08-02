@@ -37,10 +37,29 @@ app.use(session({
   saveUninitialized: false,
   store: storesession
 }))
+
+
+io.emit('some event',{someProperty:'some value',otherProperty:'other value'})
+
+io.on('connection', (socket) => {
+    socket.on('disconnect', () => {
+    })
+})
+
+io.on('connection', (socket) => {
+    socket.broadcast.emit('hi');
+});
+
+io.on('connection', (socket) => {
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+    })
+})
+
+
 const users = new Map();
 
 io.on('connection', socket => {
-  console.log(`user connected: ${socket.id}`);
   users.set(socket.id, socket.id);
 
   socket.broadcast.emit('users:joined', socket.id);
@@ -59,7 +78,6 @@ io.on('connection', socket => {
 
 
   socket.on('disconnect', () => {
-    console.log(`user disconnected: ${socket.id}`);
     users.delete(socket.id);
     socket.broadcast.emit('user:disconnect', socket.id);
   });

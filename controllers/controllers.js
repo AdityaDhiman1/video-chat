@@ -7,7 +7,6 @@ const app = express()
 const videoPage = async (req, res, next) => {
     try {
         let user = await req.session.user_name
-        console.log(user)
         res.render('index',{user: user})
     } catch (error) {
         console.error(error.message)

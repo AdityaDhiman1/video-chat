@@ -1,0 +1,120 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+  
+  *{
+    margin: 0;
+    padding: 0;
+    font-family: 'Popins',sans-serif;
+    box-sizing: border-box;
+  }
+  
+  .main-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .chat-container{
+    position: relative;
+    padding: 50px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  }
+  
+  .chat-container .chat-inputbox{
+    position: relative;
+    width: 350px;
+  
+  }
+  
+  .chat-container .chat-inputbox input{
+    position: relative;
+    padding: 8px 10px ;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #000;
+    font-size: 1.25em ;
+    width: 100%;
+    letter-spacing: 0.05em;
+    z-index: 2;
+  
+  }
+  .chat-container .chat-inputbox span{
+    position: absolute;
+    left: 0;
+    padding: 10px 0;
+    pointer-events: none;
+    font-size: 1em;
+    transition:0.5s ;
+    color: #333;
+    letter-spacing: 0.05em;
+  }
+  
+  .chat-container .chat-inputbox input:valid ~ span,
+  .chat-container .chat-inputbox input:focus ~ span
+  {
+    font-size: 0.85em;
+    transform: translateY(-32px);
+  }
+  
+  
+  .chat-container .chat-inputbox i{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(45deg,#fcffffe0,#a09e9f);
+    /* background: rgba(255, 255, 255, 0.474); */
+    transition: 0.5s;
+    z-index: 1;
+    border-radius: 4px;
+    pointer-events: none;
+  }
+  
+  .chat-container .chat-inputbox input:focus ~ i,
+  .chat-container .chat-inputbox input:valid ~ i
+  {
+    height: 100%;
+    box-shadow:0 0 10px rgba(0, 0, 0, 0.25) ;
+  }
+  button{
+    background: linear-gradient(45deg,#fcffffe0,#a09e9f);
+    border-radius: 5px;
+    margin-left: 20px;
+    height: 40px;
+    width: 60px;
+    cursor: pointer;
+    border: none;
+    box-shadow:0 0 10px rgba(0, 0, 0, 0.25);
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  }
+  #messages { 
+    margin-top: 20px;
+    list-style-type: none; 
+    padding-left: 10px; 
+    color: white;
+    max-height: 150px;
+    background-color: white;
+    width: 35%;
+    border-radius: 4px;
+    color: black;
+    text-align: start;
+    overflow-y: scroll;
+    border: none;
+    outline: none;
+    font-size: 1.25em ;
+    letter-spacing: 0.05em;
+  }
