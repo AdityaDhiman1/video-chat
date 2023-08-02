@@ -1,4 +1,2 @@
 node_modules
-demo.css
-demo.hbs
-video.hbs
+.env

@@ -1,0 +1,261 @@
+/* Reset styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  height: 70px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.nav-links li {
+  padding: 0 10px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #000;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.nav-links a:hover {
+  background-color: #007bff;
+  color: #ffffff;
+}
+.logout{
+
+  cursor: pointer;
+  color: #000;
+  background: #fff;
+  /* background-color: red; */
+}
+.logout:hover{
+  color: #fff;
+}
+.nav-links a::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: 0;
+  background-color: #007bff;
+  transition: width 0.2s ease;
+}
+
+.nav-links a:hover::before {
+  width: 100%;
+}
+
+/* Header styles */
+header {
+  text-align: center;
+  margin: 30px 0;
+}
+
+h1 {
+  font-size: 36px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 0;
+  color: #666;
+}
+
+/* Video styles */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.videos {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.video {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Users styles */
+.users {
+  flex-basis: 100%;
+}
+
+.users h3 {
+  font-size: 22px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+#users {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Status paragraph styles */
+p {
+  margin: 0;
+  text-align: center;
+  color: #007bff;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .videos {
+      flex-direction: column;
+      gap: 0;
+  }
+
+  .video {
+      max-width: none;
+  }
+
+  .users {
+      margin-top: 30px;
+  }
+}
+
+/* Custom styles */
+body {
+  margin-top: 70px; /* To make sure the navbar doesn't overlap the content */
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Style the video buttons */
+.videos button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.videos button:hover {
+  background-color: #0056b3;
+}
+
+/* Style the status paragraph */
+#status {
+  font-size: 18px;
+  color: #007bff;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Style the header and user ID */
+header h1, header h3 {
+  color: #007bff;
+}
+
+header h3 span {
+  font-weight: bold;
+}
+
+/* Style the online users section */
+.users {
+  margin-top: 30px;
+}
+
+.users h3 {
+  color: #007bff;
+}
+
+/* Style the user buttons */
+#users button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.2s ease;
+}
+
+#users button:hover {
+  background-color: #0056b3;
+}

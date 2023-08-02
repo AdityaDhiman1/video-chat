@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Video App</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="/Home"></a></li>
+                <li><a href="/login"></a></li>
+                <li><a href="#">Hello,<span>Aditya</span></a></li>
+                <li>
+                    <form action="/logout" method="post">
+                        <button type="submit" class="logout"> Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        <header>
+            <h1>My Video App</h1>
+            <h3>Your ID: <span id="myId"></span></h3>
+        </header>
+        <main>
+            <div class="videos">
+                <div class="video local-video">
+                    <video id="local-video" autoplay></video>
+                </div>
+                <div class="video remote-video">
+                    <video id="remote-video" autoplay></video>
+                </div>
+            </div>
+            <div class="users">
+                <h3>Online Users</h3>
+                <h4>{{user}}</h4>
+                <div id="users"></div>
+            </div>
+        </main>
+        <p id="status"></p>
+    </div>
+    <!-- Import socket.io script -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="socket.js"></script>
+</body>
+
+</html>
