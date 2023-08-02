@@ -2,129 +2,130 @@ const localVideo = document.getElementById('local-video');
 const remoteVideo = document.getElementById('remote-video');
 const status = document.getElementById('status');
 const usersDiv = document.getElementById('users');
-        
 
 const socket = io();
 
-        const peer = new RTCPeerConnection({
-            iceServers: [
-                {
-                    urls: "stun:stun.stunprotocol.org"
-                }
-            ]
+const peer = new RTCPeerConnection({
+    iceServers: [
+        {
+            urls: "stun:stun.stunprotocol.org"
+        }
+    ]
+});
+
+// Add local video and audio tracks to the peer connection
+const addLocalTracks = async () => {
+    try {
+        const localStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
         });
 
-        const createCall = async (to) => {
-            const status = document.getElementById('status');
-            status.innerText = `Calling ${to}`;
-
-            const localOffer = await peer.createOffer();
-            await peer.setLocalDescription(new RTCSessionDescription(localOffer));
-
-            socket.emit('outgoing:call', { fromOffer: localOffer, to });
+        for (const track of localStream.getTracks()) {
+            peer.addTrack(track, localStream);
         }
 
-        peer.ontrack = async (event) => {
-            const status = document.getElementById('status');
-            status.innerText = 'Incoming Stream';
+        localVideo.srcObject = localStream;
+        localVideo.play();
+    } catch (error) {
+        console.error("Error accessing local media:", error);
+    }
+};
 
-            const stream = event.streams[0];
-            const video = document.getElementById('remote-video');
-            video.srcObject = stream;
-            video.play();
+// Function to create a call to another user
+const createCall = async (to) => {
+    const status = document.getElementById('status');
+    status.innerText = `Calling ${to}`;
 
-            const myStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true, 
-            });
+    const localOffer = await peer.createOffer();
+    await peer.setLocalDescription(new RTCSessionDescription(localOffer));
 
-            for (const track of myStream.getTracks()) {
-                peer.addTrack(track, myStream);
-            }
-        };
+    socket.emit('outgoing:call', { fromOffer: localOffer, to });
+};
 
+peer.ontrack = (event) => {
+    const status = document.getElementById('status');
+    status.innerText = 'Incoming Stream';
 
-        socket.on('users:joined', (id) => {
-            const usersDiv = document.getElementById('users');
+    const stream = event.streams[0];
+    remoteVideo.srcObject = stream;
+    remoteVideo.play();
+};
+
+socket.on('users:joined', (id) => {
+    const btn = document.createElement('button');
+    const textNode = document.createTextNode(id);
+
+    btn.id = id;
+    btn.textContent = `Call ${id}`;
+    btn.addEventListener('click', () => createCall(id));
+
+    usersDiv.appendChild(btn);
+});
+
+socket.on('incomming:answere', async data => {
+    const status = document.getElementById('status');
+    status.innerText = 'incomming:answere';
+
+    const { offer } = data;
+    await peer.setRemoteDescription(new RTCSessionDescription(offer));
+});
+
+socket.on('user:disconnect', id => {
+    const userButton = document.getElementById(id);
+    if (userButton) {
+        userButton.remove();
+    }
+});
+
+socket.on('incomming:call', async data => {
+    const status = document.getElementById('status');
+    status.innerText = 'incomming:call';
+
+    const { from, offer } = data;
+
+    await peer.setRemoteDescription(new RTCSessionDescription(offer));
+
+    const answerOffer = await peer.createAnswer();
+    await peer.setLocalDescription(new RTCSessionDescription(answerOffer));
+
+    socket.emit('call:accepted', { answer: answerOffer, to: from });
+});
+
+const getAndUpdateUsers = async () => {
+    usersDiv.innerHTML = '';
+
+    try {
+        const response = await fetch('/users', { method: 'GET' });
+        const jsonResponse = await response.json();
+
+        jsonResponse.forEach(user => {
             const btn = document.createElement('button');
-            const textNode = document.createTextNode(id);
+            btn.id = user[0];
+            btn.textContent = `Call ${user[0]}`;
+            btn.addEventListener('click', () => createCall(user[0]));
 
-            btn.id = id;
-
-            btn.setAttribute('onclick', `createCall('${id}')`);
-            btn.appendChild(textNode);
             usersDiv.appendChild(btn);
         });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+    }
+};
 
+socket.on('hello', ({ id }) => document.getElementById('myId').innerText = id);
 
-        socket.on('incomming:answere', async data => {
-            const status = document.getElementById('status');
-            status.innerText = 'incomming:answere';
+const init = async () => {
+    // Connect to socket.io
+    // You need to set up socket.io server on the backend to handle connections
+    // You can use the 'socket.io-client' library on the frontend to connect to it.
+    // For this example, we assume that the socket connection is established.
 
-            const { offer } = data;
-            await peer.setRemoteDescription(new RTCSessionDescription(offer));
-        });
+    // Get user media (video and audio)
+    await addLocalTracks();
 
-        socket.on('user:disconnect', id => {
-            document.getElementById(id).remove()
-        })
+    // Get other users from the server and display them
+    getAndUpdateUsers();
+};
 
-        socket.on('incomming:call', async data => {
-            const status = document.getElementById('status');
-            status.innerText = 'incomming:call';
-
-            const { from, offer } = data;
-
-            await peer.setRemoteDescription(new RTCSessionDescription(offer));
-
-            const answereOffer = await peer.createAnswer();
-            await peer.setLocalDescription(new RTCSessionDescription(answereOffer));
-
-            socket.emit('call:accepted', { answere: answereOffer, to: from });
-            const mySteam = await navigator.mediaDevices.getUserMedia({
-                video: true,
-            });
-
-            for (const track of mySteam.getTracks()) {
-                peer.addTrack(track, mySteam);
-            }
-        })
-
-        const getAndUpdateUsers = async () => {
-            const usersDiv = document.getElementById('users');
-            usersDiv.innerHTML = ''
-
-            const response = await fetch('/users', { method: 'GET' });
-            const jsonResponse = await response.json();
-
-            console.log(jsonResponse)
-
-            jsonResponse.forEach(user => {
-                const btn = document.createElement('button');
-                const textNode = document.createTextNode(user[0]);
-
-                btn.id = user[0];
-
-                btn.setAttribute('onclick', `createCall('${user[0]}')`);
-                btn.appendChild(textNode);
-                usersDiv.appendChild(btn);
-            });
-        }
-
-        socket.on('hello', ({ id }) => document.getElementById('myId').innerText = id)
-
-
-        const getUserMedia = async () => {
-            const userMedia = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true,
-            });
-
-            const videoEle = document.getElementById('local-video');
-            videoEle.srcObject = userMedia;
-            videoEle.play()
-        }
-
-
-        window.addEventListener('load', getAndUpdateUsers);
-        window.addEventListener('load', getUserMedia);
+// Call the init function when the window is loaded
+window.addEventListener('load', init);
